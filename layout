@@ -1,0 +1,60 @@
+import { Box, Grid, GridItem, useToast, Image } from "@chakra-ui/react";
+import { useState } from "react";
+import { FaChessPawn, FaChessRook, FaChessKnight, FaChessBishop, FaChessQueen, FaChessKing } from "react-icons/fa";
+
+const initialBoardSetup = [
+  ["r", "n", "b", "q", "k", "b", "n", "r"],
+  ["p", "p", "p", "p", "p", "p", "p", "p"],
+  [" ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " "],
+  [" ", " ", " ", " ", " ", " ", " ", " "],
+  ["P", "P", "P", "P", "P", "P", "P", "P"],
+  ["R", "N", "B", "Q", "K", "B", "N", "R"],
+];
+
+const pieceIcons = {
+  p: <FaChessPawn color="black" />,
+  r: <FaChessRook color="black" />,
+  n: <FaChessKnight color="black" />,
+  b: <FaChessBishop color="black" />,
+  q: <FaChessQueen color="black" />,
+  k: <FaChessKing color="black" />,
+  P: <FaChessPawn color="white" />,
+  R: <FaChessRook color="white" />,
+  N: <FaChessKnight color="white" />,
+  B: <FaChessBishop color="white" />,
+  Q: <FaChessQueen color="white" />,
+  K: <FaChessKing color="white" />,
+};
+
+const Index = () => {
+  const [board, setBoard] = useState(initialBoardSetup);
+  const toast = useToast();
+
+  const handleSquareClick = (piece, row, col) => {
+    toast({
+      title: `Clicked on square: ${row}, ${col}`,
+      description: piece ? `Piece present: ${piece.toUpperCase()}` : "No piece on this square",
+      status: "info",
+      duration: 2000,
+      isClosable: true,
+    });
+  };
+
+  return (
+    <Box w="100vw" h="100vh" bg="gray.800" color="white" display="flex" alignItems="center" justifyContent="center">
+      <Grid templateColumns="repeat(8, 1fr)" gap={1} p={4} bg="gray.700" w="80vmin" h="80vmin">
+        {board.map((row, rowIndex) =>
+          row.map((cell, colIndex) => (
+            <GridItem w="10vmin" h="10vmin" bg={(rowIndex + colIndex) % 2 === 0 ? "gray.600" : "gray.500"} display="flex" alignItems="center" justifyContent="center" onClick={() => handleSquareClick(cell, rowIndex, colIndex)} key={`${rowIndex}-${colIndex}`}>
+              {pieceIcons[cell] || ""}
+            </GridItem>
+          )),
+        )}
+      </Grid>
+    </Box>
+  );
+};
+
+export default Index;
